@@ -31,10 +31,11 @@ jobs:
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          git pull --rebase https://$GH_PAT@github.com/0xUN7H1NK4BLE/photos.git HEAD:${GITHUB_REF#refs/heads/}
+          git fetch origin main
+          git rebase origin/main
 
       - name: Push changes
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          git push https://$GH_PAT@github.com/0xUN7H1NK4BLE/photos.git HEAD:${GITHUB_REF#refs/heads/}  
+          git push https://$GH_PAT@github.com/0xUN7H1NK4BLE/photos.git HEAD:main  
