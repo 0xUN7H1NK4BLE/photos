@@ -22,8 +22,8 @@ jobs:
 
       - name: Commit changes
         run: |
-          git config --global user.name 'Your Name'
-          git config --global user.email 'your-email@example.com'
+          git config --global user.name '0xUN7H1NK4BLE'
+          git config --global user.email 'anishji0306@gmail.com'
           git add index.html
           git commit -m 'chore: auto-generate index.html [skip ci]' || echo "No changes to commit"
 
@@ -31,4 +31,4 @@ jobs:
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          git push https://0xUN7H1NK4BLE:$GH_PAT@github.com/0xUN7H1NK4BLE/photos.git HEAD:${GITHUB_REF#refs/heads/}  
+          git push https://$GH_PAT@github.com/0xUN7H1NK4BLE/photos.git HEAD:${GITHUB_REF#refs/heads/}  
