@@ -8,9 +8,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_PAT }}  # ✅ Use PAT for pushing
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -20,24 +23,42 @@ jobs:
       - name: Generate index.html
         run: python generate_index.py
 
-      - name: Commit changes
-        run: |
-          git config --global user.name '0xUN7H1NK4BLE'
-          git config --global user.email 'anishji0306@gmail.com'
-          git add index.html
-          git commit -m 'chore: auto-generate index.html [skip ci]' || echo "No changes to commit"
+      - name: Commit and push changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: 'index.html'
+          message: 'chore: auto-generate index.html [skip ci]'
+          default_author: github_actions
+          token: ${{ secrets.GH_PAT }}  # ✅ This is the fix!
+name: Generate index.html
 
-      - name: Pull latest changes
-        run: |
-          git fetch origin main
-          git rebase origin/main
+on:
+  push:
+    branches:
+      - '**'
 
-      - name: Debug: Show git remote
-        run: git remote -v
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-      - name: Debug: Show last commit author
-        run: git log -1 --pretty=full
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_PAT }}  # ✅ Use PAT for pushing
 
-      - name: Push changes
-        run: |
-          git push https://${{ secrets.GH_PAT }}@github.com/0xUN7H1NK4BLE/photos.git HEAD:main
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Generate index.html
+        run: python generate_index.py
+
+      - name: Commit and push changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: 'index.html'
+          message: 'chore: auto-generate index.html [skip ci]'
+          default_author: github_actions
+          token: ${{ secrets.GH_PAT }}  # ✅ This is the fix!
