@@ -27,6 +27,12 @@ jobs:
           git add index.html
           git commit -m 'chore: auto-generate index.html [skip ci]' || echo "No changes to commit"
 
+      - name: Pull latest changes
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          git pull --rebase https://$GH_PAT@github.com/0xUN7H1NK4BLE/photos.git HEAD:${GITHUB_REF#refs/heads/}
+
       - name: Push changes
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
