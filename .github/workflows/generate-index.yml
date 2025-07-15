@@ -28,14 +28,16 @@ jobs:
           git commit -m 'chore: auto-generate index.html [skip ci]' || echo "No changes to commit"
 
       - name: Pull latest changes
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git fetch origin main
           git rebase origin/main
 
+      - name: Debug: Show git remote
+        run: git remote -v
+
+      - name: Debug: Show last commit author
+        run: git log -1 --pretty=full
+
       - name: Push changes
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          git push https://$GH_PAT@github.com/0xUN7H1NK4BLE/photos.git HEAD:main  
+          git push https://${{ secrets.GH_PAT }}@github.com/0xUN7H1NK4BLE/photos.git HEAD:main  
