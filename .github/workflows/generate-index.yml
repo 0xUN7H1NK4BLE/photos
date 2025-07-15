@@ -40,4 +40,4 @@ jobs:
 
       - name: Push changes
         run: |
-          git push https://${{ secrets.GH_PAT }}@github.com/0xUN7H1NK4BLE/photos.git HEAD:main  
+          git push https://${{ secrets.GH_PAT }}@github.com/0xUN7H1NK4BLE/photos.git HEAD:main
