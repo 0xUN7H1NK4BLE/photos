@@ -26,4 +26,4 @@ jobs:
           add: 'index.html'
           message: 'chore: auto-generate index.html [skip ci]'
           default_author: github_actions
-          token: ${{ secrets.GH_PAT }}  
+          github_token: ${{ secrets.GH_PAT }}  
