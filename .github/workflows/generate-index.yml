@@ -21,7 +21,7 @@ jobs:
           python-version: '3.x'
 
       - name: Generate index.html
-        run: python generate_index.py
+        run: python code/generate_gallery.py
 
       - name: Commit and push changes
         uses: EndBug/add-and-commit@v9
