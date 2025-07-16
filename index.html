@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Travel Gallery</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <div class="gallery-title">Travel Gallery</div>
+    <div class="gallery-updated">Updated on July 16, 2025</div>
+  </div>
+  <div class="header-right">
+    <div class="search-container">
+      <input type="text" class="search-bar" placeholder="Search places, cities, or memories...">
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="gallery-grid">
+    <div class="gallery-item" data-place="North Abc" data-title="2025 07 16 09 21">
+      <img src="photos/north ABC/2025-07-16_09-21.png" alt="North Abc - 2025 07 16 09 21">
+      <div class="image-overlay">
+        <div class="image-title">2025 07 16 09 21</div>
+        <div class="image-location">North Abc</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-place="North Abc" data-title="Images (1)">
+      <img src="photos/north ABC/images (1).jpeg" alt="North Abc - Images (1)">
+      <div class="image-overlay">
+        <div class="image-title">Images (1)</div>
+        <div class="image-location">North Abc</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-place="North Abc" data-title="Images (2)">
+      <img src="photos/north ABC/images (2).jpeg" alt="North Abc - Images (2)">
+      <div class="image-overlay">
+        <div class="image-title">Images (2)</div>
+        <div class="image-location">North Abc</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-place="North Abc" data-title="Images (3)">
+      <img src="photos/north ABC/images (3).jpeg" alt="North Abc - Images (3)">
+      <div class="image-overlay">
+        <div class="image-title">Images (3)</div>
+        <div class="image-location">North Abc</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-place="North Abc" data-title="Images (4)">
+      <img src="photos/north ABC/images (4).jpeg" alt="North Abc - Images (4)">
+      <div class="image-overlay">
+        <div class="image-title">Images (4)</div>
+        <div class="image-location">North Abc</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-place="North Abc" data-title="Images">
+      <img src="photos/north ABC/images.jpeg" alt="North Abc - Images">
+      <div class="image-overlay">
+        <div class="image-title">Images</div>
+        <div class="image-location">North Abc</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-place="Test" data-title="Images (1)">
+      <img src="photos/test/images (1).jpeg" alt="Test - Images (1)">
+      <div class="image-overlay">
+        <div class="image-title">Images (1)</div>
+        <div class="image-location">Test</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-place="Test" data-title="Images (3)">
+      <img src="photos/test/images (3).jpeg" alt="Test - Images (3)">
+      <div class="image-overlay">
+        <div class="image-title">Images (3)</div>
+        <div class="image-location">Test</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-place="Test" data-title="Images">
+      <img src="photos/test/images.jpeg" alt="Test - Images">
+      <div class="image-overlay">
+        <div class="image-title">Images</div>
+        <div class="image-location">Test</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-place="Test" data-title="Test">
+      <img src="photos/test/test.jpg" alt="Test - Test">
+      <div class="image-overlay">
+        <div class="image-title">Test</div>
+        <div class="image-location">Test</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-place="Pokhara" data-title="Phewa Lake Pokhara">
+      <img src="photos/pokhara/Phewa-lake-Pokhara.jpg" alt="Pokhara - Phewa Lake Pokhara">
+      <div class="image-overlay">
+        <div class="image-title">Phewa Lake Pokhara</div>
+        <div class="image-location">Pokhara</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-place="Pokhara" data-title="Images (1)">
+      <img src="photos/pokhara/images (1).jpeg" alt="Pokhara - Images (1)">
+      <div class="image-overlay">
+        <div class="image-title">Images (1)</div>
+        <div class="image-location">Pokhara</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-place="Pokhara" data-title="Images (2)">
+      <img src="photos/pokhara/images (2).jpeg" alt="Pokhara - Images (2)">
+      <div class="image-overlay">
+        <div class="image-title">Images (2)</div>
+        <div class="image-location">Pokhara</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-place="Pokhara" data-title="Images">
+      <img src="photos/pokhara/images.jpeg" alt="Pokhara - Images">
+      <div class="image-overlay">
+        <div class="image-title">Images</div>
+        <div class="image-location">Pokhara</div>
+      </div>
+    </div>
+    <div class="gallery-item" data-place="Pokhara" data-title="Pokhara 602 320">
+      <img src="photos/pokhara/pokhara-602-320.gif" alt="Pokhara - Pokhara 602 320">
+      <div class="image-overlay">
+        <div class="image-title">Pokhara 602 320</div>
+        <div class="image-location">Pokhara</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal -->
+<div class="modal" id="imageModal">
+  <div class="modal-background" id="modalBackground"></div>
+  <div class="modal-content">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <img class="modal-image" id="modalImage" src="" alt="">
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
