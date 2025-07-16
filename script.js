@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const searchBar = document.querySelector('.search-bar');
   const galleryItems = document.querySelectorAll('.gallery-item');
   const header = document.querySelector('header');
+  const darkModeToggle = document.getElementById('darkModeToggle');
 
   let lastScrollTop = 0;
   let scrollThreshold = 100;
@@ -140,5 +141,26 @@ document.addEventListener('DOMContentLoaded', function () {
     item.addEventListener('mouseleave', function() {
       this.style.transform = 'translateY(0) scale(1)';
     });
+  });
+
+  // DARK MODE TOGGLE
+  function setDarkMode(enabled) {
+    if (enabled) {
+      document.body.classList.add('dark-mode');
+      darkModeToggle.textContent = '☀️';
+    } else {
+      document.body.classList.remove('dark-mode');
+      darkModeToggle.textContent = '🌙';
+    }
+  }
+
+  // Load preference
+  const darkPref = localStorage.getItem('darkMode') === 'true';
+  setDarkMode(darkPref);
+
+  darkModeToggle.addEventListener('click', function() {
+    const enabled = !document.body.classList.contains('dark-mode');
+    setDarkMode(enabled);
+    localStorage.setItem('darkMode', enabled);
   });
 }); 

@@ -93,7 +93,9 @@ def generate_html(places_data):
             # Get image filename without extension
             image_name = os.path.splitext(os.path.basename(image_path))[0]
             # Clean up the image name for display
-            display_name = image_name.replace('_', ' ').replace('-', ' ').title()
+            # display_name = image_name.replace('_', ' ').replace('-', ' ').title()
+            # Use the folder name (place) as the display name
+            display_name = place
             
             # Get country for the location display
             country = getCountry(place)
