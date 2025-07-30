@@ -11,7 +11,7 @@ from pathlib import Path
 
 def get_image_files(folder_path):
     """Get all image files from a folder"""
-    image_extensions = ['*.jpg', '*.jpeg', '*.png', '*.gif', '*.webp', '*.bmp']
+    image_extensions = ['*.jpg', '*.jpeg', '*.png', '*.gif', '*.webp', '*.bmp', '*.*']
     image_files = []
     
     for ext in image_extensions:
