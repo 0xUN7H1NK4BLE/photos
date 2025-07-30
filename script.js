@@ -10,24 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const header = document.querySelector('header');
   const darkModeToggle = document.getElementById('darkModeToggle');
 
-  // Lazy loading setup
-  const lazyImages = document.querySelectorAll('.lazy-image');
-  const imageObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const img = entry.target;
-        img.src = img.dataset.src;
-        img.classList.add('loaded');
-        observer.unobserve(img);
-      }
-    });
-  }, {
-    rootMargin: '50px 0px',
-    threshold: 0.01
-  });
 
-  // Start observing lazy images
-  lazyImages.forEach(img => imageObserver.observe(img));
 
   let lastScrollTop = 0;
   let scrollThreshold = 100;
@@ -57,12 +40,9 @@ document.addEventListener('DOMContentLoaded', function () {
     item.addEventListener('click', function() {
       const img = this.querySelector('img');
       
-      // Use data-src if image hasn't loaded yet, otherwise use src
-      const imageSrc = img.dataset.src || img.src;
-      
-      modalImage.src = imageSrc;
+      modalImage.src = img.src;
       modalImage.alt = img.alt;
-      modalBackground.style.backgroundImage = `url(${imageSrc})`;
+      modalBackground.style.backgroundImage = `url(${img.src})`;
       
       modal.classList.add('active');
       document.body.style.overflow = 'hidden';

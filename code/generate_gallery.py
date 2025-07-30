@@ -179,7 +179,7 @@ def generate_html(places_data):
             location_display = place
             
             html_content += f'''    <div class="gallery-item" data-place="{place}" data-title="{display_name}">
-      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="{image_path}" alt="{place} - {display_name}" loading="lazy" class="lazy-image">
+      <img src="{image_path}" alt="{place} - {display_name}">
       <div class="image-overlay">
         <div class="image-title">{display_name}</div>
         <div class="image-location">{location_display}</div>
