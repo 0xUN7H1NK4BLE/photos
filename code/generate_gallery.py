@@ -8,17 +8,47 @@ import os
 import glob
 from datetime import datetime
 from pathlib import Path
+from pillow_heif import register_heif_opener
+from PIL import Image
+
+register_heif_opener()
 
 def get_image_files(folder_path):
-    """Get all image files from a folder"""
+    """Get all image files from a folder and convert .heic to .jpg"""
     image_extensions = ['*.jpg', '*.jpeg', '*.png', '*.gif', '*.webp', '*.bmp', '*.*']
     image_files = []
     
     for ext in image_extensions:
         image_files.extend(glob.glob(os.path.join(folder_path, ext)))
         image_files.extend(glob.glob(os.path.join(folder_path, ext.upper())))
+
+    # Convert HEIC files to JPG
+    converted_files = []
+    for file_path in image_files:
+        if file_path.lower().endswith(".heic"):
+            jpg_path = os.path.splitext(file_path)[0] + ".jpg"
+            try:
+                image = Image.open(file_path)
+                image.save(jpg_path, format="JPEG")
+                converted_files.append(jpg_path)
+            except Exception as e:
+                print(f"❌ Failed to convert {file_path}: {e}")
+        else:
+            converted_files.append(file_path)
     
-    return sorted(image_files)
+    return sorted(converted_files)
+
+
+# def get_image_files(folder_path):
+#     """Get all image files from a folder"""
+#     image_extensions = ['*.jpg', '*.jpeg', '*.png', '*.gif', '*.webp', '*.bmp', '*.*']
+#     image_files = []
+    
+#     for ext in image_extensions:
+#         image_files.extend(glob.glob(os.path.join(folder_path, ext)))
+#         image_files.extend(glob.glob(os.path.join(folder_path, ext.upper())))
+    
+#     return sorted(image_files)
 
 def getCountry(place):
     """Get country name for a place"""
