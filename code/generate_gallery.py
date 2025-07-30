@@ -8,35 +8,107 @@ import os
 import glob
 from datetime import datetime
 from pathlib import Path
-from pillow_heif import register_heif_opener
 from PIL import Image
+from pillow_heif import register_heif_opener, HeifImage
+import hashlib
+import os
+
+def calculate_file_hash(filepath, chunk_size=8192):
+    """Calculate MD5 hash of a file's content."""
+    hasher = hashlib.md5()
+    with open(filepath, 'rb') as f:
+        while chunk := f.read(chunk_size):
+            hasher.update(chunk)
+    return hasher.hexdigest()
+
+def remove_duplicate_files(directory):
+    """Find and remove duplicate files in a directory (recursively)."""
+    print(f"🔍 Scanning for duplicates in: {directory}")
+    hashes = {}
+    duplicates = []
+
+    for root, _, files in os.walk(directory):
+        for file in files:
+            filepath = os.path.join(root, file)
+
+            try:
+                file_hash = calculate_file_hash(filepath)
+
+                if file_hash in hashes:
+                    # Duplicate found
+                    print(f"❌ Duplicate: {filepath} (same as {hashes[file_hash]})")
+                    duplicates.append(filepath)
+                else:
+                    hashes[file_hash] = filepath
+            except Exception as e:
+                print(f"⚠️ Could not read {filepath}: {e}")
+
+    # Delete duplicates
+    for dup in duplicates:
+        try:
+            os.remove(dup)
+            print(f"🗑️ Removed: {dup}")
+        except Exception as e:
+            print(f"⚠️ Failed to delete {dup}: {e}")
+
+    print(f"✅ Done. Removed {len(duplicates)} duplicates.")
+
+
 
 register_heif_opener()
 
 def get_image_files(folder_path):
     """Get all image files from a folder and convert .heic to .jpg"""
-    image_extensions = ['*.jpg', '*.jpeg', '*.png', '*.gif', '*.webp', '*.bmp', '*.*']
+    image_extensions = ['*.jpg', '*.jpeg', '*.png', '*.gif', '*.webp', '*.bmp', '*.heic']
     image_files = []
     
     for ext in image_extensions:
         image_files.extend(glob.glob(os.path.join(folder_path, ext)))
         image_files.extend(glob.glob(os.path.join(folder_path, ext.upper())))
 
-    # Convert HEIC files to JPG
+    # Remove duplicates before processing
+    unique_files = []
+    seen_hashes = set()
+    
+    for file_path in sorted(image_files):
+        try:
+            file_hash = calculate_file_hash(file_path)
+            if file_hash not in seen_hashes:
+                seen_hashes.add(file_hash)
+                unique_files.append(file_path)
+            else:
+                print(f"🗑️ Skipping duplicate: {file_path}")
+        except Exception as e:
+            print(f"⚠️ Could not read {file_path}: {e}")
+
     converted_files = []
-    for file_path in image_files:
+    for file_path in unique_files:
         if file_path.lower().endswith(".heic"):
             jpg_path = os.path.splitext(file_path)[0] + ".jpg"
+            
+            # Check if JPG already exists and has same content
+            if os.path.exists(jpg_path):
+                try:
+                    heic_hash = calculate_file_hash(file_path)
+                    jpg_hash = calculate_file_hash(jpg_path)
+                    if heic_hash == jpg_hash:
+                        print(f"🗑️ Skipping HEIC (JPG exists): {file_path}")
+                        continue
+                except Exception as e:
+                    print(f"⚠️ Could not compare hashes: {e}")
+            
             try:
                 image = Image.open(file_path)
-                image.save(jpg_path, format="JPEG")
+                image = image.convert("RGB")  # Convert to JPEG-compatible format
+                image.save(jpg_path, "JPEG", quality=95)
                 converted_files.append(jpg_path)
+                print(f"✅ Converted: {file_path} → {jpg_path}")
             except Exception as e:
                 print(f"❌ Failed to convert {file_path}: {e}")
         else:
             converted_files.append(file_path)
-    
-    return sorted(converted_files)
+
+    return converted_files
 
 
 # def get_image_files(folder_path):
@@ -50,47 +122,18 @@ def get_image_files(folder_path):
     
 #     return sorted(image_files)
 
-def getCountry(place):
-    """Get country name for a place"""
-    countries = {
-        'Paris': 'France',
-        'London': 'UK',
-        'Tokyo': 'Japan',
-        'New York': 'USA',
-        'Venice': 'Italy',
-        'Barcelona': 'Spain',
-        'Rome': 'Italy',
-        'Amsterdam': 'Netherlands',
-        'Berlin': 'Germany',
-        'Prague': 'Czech Republic',
-        'Vienna': 'Austria',
-        'Budapest': 'Hungary',
-        'Krakow': 'Poland',
-        'Istanbul': 'Turkey',
-        'Dubai': 'UAE',
-        'Singapore': 'Singapore',
-        'Bangkok': 'Thailand',
-        'Hong Kong': 'China',
-        'Seoul': 'South Korea',
-        'Sydney': 'Australia',
-        'Melbourne': 'Australia',
-        'Toronto': 'Canada',
-        'Vancouver': 'Canada',
-        'Montreal': 'Canada',
-        'Mexico City': 'Mexico',
-        'Rio de Janeiro': 'Brazil',
-        'Buenos Aires': 'Argentina',
-        'Cape Town': 'South Africa',
-        'Marrakech': 'Morocco',
-        'Cairo': 'Egypt'
-    }
-    return countries.get(place, '')
+
 
 def generate_html(places_data):
     """Generate the HTML content"""
     
     # Get current date for the header
     current_date = datetime.now().strftime("%B %d, %Y")
+    
+    # Calculate gallery statistics
+    total_photos = sum(len(images) for images in places_data.values())
+    total_places = len(places_data)
+    places_list = ", ".join(places_data.keys())
     
     html_content = f'''<!DOCTYPE html>
 <html lang="en">
@@ -104,6 +147,11 @@ def generate_html(places_data):
 <header>
   <div class="header-left">
     <div class="gallery-title">Travel Gallery</div>
+    <div class="gallery-stats">
+      <span class="stat-item">📸 {total_photos} photos</span>
+      <span class="stat-item">📍 {total_places} places</span>
+      <span class="stat-item">🌍 {places_list}</span>
+    </div>
     <div class="gallery-updated">Updated on {current_date}</div>
   </div>
   <div class="header-right">
@@ -127,12 +175,11 @@ def generate_html(places_data):
             # Use the folder name (place) as the display name
             display_name = place
             
-            # Get country for the location display
-            country = getCountry(place)
-            location_display = f"{place}, {country}" if country else place
+            # Use place name as location display
+            location_display = place
             
             html_content += f'''    <div class="gallery-item" data-place="{place}" data-title="{display_name}">
-      <img src="{image_path}" alt="{place} - {display_name}">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="{image_path}" alt="{place} - {display_name}" loading="lazy" class="lazy-image">
       <div class="image-overlay">
         <div class="image-title">{display_name}</div>
         <div class="image-location">{location_display}</div>
@@ -188,9 +235,25 @@ def main():
             images = get_image_files(place_path)
             
             if images:
-                # Clean up place name for display
-                place_name = place_folder.replace('_', ' ').replace('-', ' ').title()
-                places_data[place_name] = images
+                # Final duplicate check to ensure no duplicates in the final list
+                unique_images = []
+                seen_hashes = set()
+                
+                for image_path in images:
+                    try:
+                        file_hash = calculate_file_hash(image_path)
+                        if file_hash not in seen_hashes:
+                            seen_hashes.add(file_hash)
+                            unique_images.append(image_path)
+                        else:
+                            print(f"🗑️ Final duplicate check - skipping: {image_path}")
+                    except Exception as e:
+                        print(f"⚠️ Could not hash {image_path}: {e}")
+                
+                if unique_images:
+                    # Clean up place name for display
+                    place_name = place_folder.replace('_', ' ').replace('-', ' ').title()
+                    places_data[place_name] = unique_images
     
     if not places_data:
         print("No photos found!")
