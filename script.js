@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const searchBar = document.querySelector('.search-bar');
   const galleryItems = document.querySelectorAll('.gallery-item');
   const header = document.querySelector('header');
-  const darkModeToggle = document.getElementById('darkModeToggle');
 
 
 
@@ -40,9 +39,12 @@ document.addEventListener('DOMContentLoaded', function () {
     item.addEventListener('click', function() {
       const img = this.querySelector('img');
       
-      modalImage.src = img.src;
+      // Use full-size image for modal, thumbnail for grid
+      const fullImageSrc = img.dataset.full || img.src;
+      
+      modalImage.src = fullImageSrc;
       modalImage.alt = img.alt;
-      modalBackground.style.backgroundImage = `url(${img.src})`;
+      modalBackground.style.backgroundImage = `url(${fullImageSrc})`;
       
       modal.classList.add('active');
       document.body.style.overflow = 'hidden';
@@ -110,6 +112,22 @@ document.addEventListener('DOMContentLoaded', function () {
     return countries[place] || '';
   }
 
+  // Image loading optimization
+  const images = document.querySelectorAll('.gallery-item img');
+  images.forEach(img => {
+    img.classList.add('loading');
+    
+    img.addEventListener('load', function() {
+      this.classList.remove('loading');
+      this.classList.add('loaded');
+    });
+    
+    img.addEventListener('error', function() {
+      this.classList.remove('loading');
+      console.error('Failed to load image:', this.src);
+    });
+  });
+
   // Smooth scroll animation for gallery items
   const observerOptions = {
     threshold: 0.1,
@@ -145,24 +163,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // DARK MODE TOGGLE
-  function setDarkMode(enabled) {
-    if (enabled) {
-      document.body.classList.add('dark-mode');
-      darkModeToggle.textContent = '☀️';
-    } else {
-      document.body.classList.remove('dark-mode');
-      darkModeToggle.textContent = '🌙';
-    }
-  }
 
-  // Load preference
-  const darkPref = localStorage.getItem('darkMode') === 'true';
-  setDarkMode(darkPref);
-
-  darkModeToggle.addEventListener('click', function() {
-    const enabled = !document.body.classList.contains('dark-mode');
-    setDarkMode(enabled);
-    localStorage.setItem('darkMode', enabled);
-  });
 }); 

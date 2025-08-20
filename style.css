@@ -11,93 +11,7 @@ body {
   overflow-x: hidden;
 }
 
-/* DARK MODE STYLES */
-body.dark-mode {
-  background: #181a1b;
-  color: #e0e0e0;
-}
 
-body.dark-mode header {
-  background: rgba(24, 26, 27, 0.7);
-  color: #e0e0e0;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-
-body.dark-mode .gallery-title {
-  color: #fff;
-}
-
-body.dark-mode .gallery-stats .stat-item {
-  background: rgba(40, 42, 45, 0.8);
-  color: #e0e0e0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode .gallery-updated {
-  color: #b0b0b0;
-}
-
-body.dark-mode .search-bar {
-  background: rgba(40, 42, 45, 0.9);
-  color: #fff;
-  border: 2px solid rgba(255,255,255,0.08);
-}
-
-body.dark-mode .search-bar:focus {
-  background: #232526;
-  border-color: #667eea;
-  color: #fff;
-}
-
-body.dark-mode .gallery-item {
-  background: #232526;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-}
-
-body.dark-mode .gallery-item:hover {
-  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-}
-
-body.dark-mode .image-overlay {
-  background: linear-gradient(transparent, rgba(0,0,0,0.92));
-  color: #fff;
-}
-
-body.dark-mode .modal {
-  background: rgba(10, 10, 10, 0.85);
-}
-
-body.dark-mode .modal-content {
-  background: #232526;
-  color: #fff;
-}
-
-body.dark-mode .modal-image {
-  background: #181a1b;
-}
-
-body.dark-mode .modal-close {
-  color: #fff;
-  background: rgba(40, 42, 45, 0.7);
-}
-
-body.dark-mode .modal-close:hover {
-  background: #232526;
-}
-
-.dark-mode-toggle {
-  margin-left: 18px;
-  background: none;
-  border: none;
-  font-size: 1.6rem;
-  cursor: pointer;
-  color: #333;
-  transition: color 0.2s;
-}
-
-body.dark-mode .dark-mode-toggle {
-  color: #ffe066;
-}
 
 /* Hero Header */
 header {
@@ -260,9 +174,9 @@ main {
   position: relative;
   border-radius: 12px;
   overflow: hidden;
-  background: white;
+  background: #ffffff;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   animation: fadeInUp 0.6s ease-out;
   break-inside: avoid;
@@ -273,8 +187,8 @@ main {
 }
 
 .gallery-item:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15);
 }
 
 .gallery-item img {
@@ -284,6 +198,19 @@ main {
   display: block;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
+  background: #f0f0f0;
+}
+
+.gallery-item img.loading {
+  opacity: 0.8;
+  filter: blur(1px);
+  transition: all 0.3s ease;
+}
+
+.gallery-item img.loaded {
+  opacity: 1;
+  filter: blur(0);
+  transition: all 0.3s ease;
 }
 
 
